@@ -7,7 +7,7 @@ const Stack = createStackNavigator();
 
 const Routes = () => {
     return (
-        <Stack.Navigator initialRouteName = "Map">
+        <Stack.Navigator initialRouteName = "List">
             <Stack.Screen name = "List" component = {ListScreen}/>
             <Stack.Screen name = "Map" component = {Map}/>
         </Stack.Navigator>

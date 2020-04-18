@@ -54,7 +54,18 @@ const List = (props) => {
         const granted = requestLocationPermission();
         if(granted) {
             console.log("Ta permitido");
-            props.navigation.navigate("Map");
+            Geolocation.getCurrentPosition(
+                (position) => {
+                    const {latitude, longitude} = position.coords;
+                    props.navigation.navigate("Map", {latitude, longitude});
+                },
+                (err) => {
+                    //TODO
+                    console.log(err);
+                },
+                { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000}
+            );
+            
         }else{
            //TODO
            console.log("Deu ruim");

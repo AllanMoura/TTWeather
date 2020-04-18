@@ -5,7 +5,7 @@ import Styles from './styles';
 const WeatherCard = (props) => {
 
     const {latitude, longitude} = props;
-
+    
     return (
         <View style = {Styles.card}>
             <Text style = {Styles.title}>Clima</Text>

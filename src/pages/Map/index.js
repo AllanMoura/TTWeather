@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import MapView, { Marker } from 'react-native-maps';
 import { View } from 'react-native';
+import WeatherCard from './../../components/WeatherCard';
 import Styles from './styles';
 
 const Map = (props) => {
@@ -26,7 +27,7 @@ const Map = (props) => {
     }
 
     return (
-        <View>
+        <View style = {Styles.box}>
             <MapView 
                 style = {Styles.map} 
                 initialRegion = {initialRegion} 
@@ -38,6 +39,11 @@ const Map = (props) => {
                     title = {"Marker"}
                 />
             </MapView>
+            
+            <WeatherCard 
+                latitude = {location.latitude}
+                longitude = {location.longitude}
+            />
         </View>
     );
 }

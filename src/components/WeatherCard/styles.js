@@ -5,7 +5,7 @@ const Styles = StyleSheet.create({
         backgroundColor: '#4d94ff',
         borderRadius: 20,
         opacity: 0.75,
-        marginTop: -200,
+        marginTop: -230,
         marginHorizontal: 20,
         paddingHorizontal: 25,
         paddingTop: 10,
@@ -35,7 +35,15 @@ const Styles = StyleSheet.create({
     },
     celcius: {
         fontSize: 30
-    }
+    },
+    inputText: {
+        height: 40,
+        borderColor: 'gray',
+        borderWidth: 1,
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        fontSize: 20,
+    },
 });
 
 export default Styles;

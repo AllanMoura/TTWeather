@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Button, PermissionsAndroid} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 
@@ -72,6 +72,13 @@ const List = (props) => {
         }
         
     }
+    
+    useEffect( () => {
+        if(props.route.params?.location){
+            console.log("Tentando adicionar um novo objeto");
+            console.log(props.route.params.location);
+        }
+    }, [props.route.params?.location]);
 
     return (
         <View>

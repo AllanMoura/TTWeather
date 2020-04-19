@@ -1,11 +1,11 @@
-import React, {useState, useEffect} from 'react';
-import {View, Text, Image} from 'react-native';
+import React from 'react';
+import {View, Text, Image, TextInput} from 'react-native';
 import Styles from './styles';
 
 const WeatherCard = (props) => {
 
-    const {weather} = props;
-
+    const {weather, location, setLocation} = props;
+    
     return (
         <View style = {Styles.card}>
             <Text style = {Styles.title}>Clima</Text>
@@ -24,7 +24,15 @@ const WeatherCard = (props) => {
                     </View>
                 </View>
             </View>
+            <TextInput 
+                style = {Styles.inputText} 
+                placeholder = {"Ensira um nome para o local"}
+                value = {location.title}
+                onChangeText = {text => {setLocation({...location, title: text})}}
+            />
+            
         </View>
+        
     );
 }
 

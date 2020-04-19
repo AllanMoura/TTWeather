@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import MapView, { Marker } from 'react-native-maps';
 import api from './../../services/api';
-import { View } from 'react-native';
+import { View, TouchableOpacity} from 'react-native';
 import WeatherCard from './../../components/WeatherCard';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import Styles from './styles';
 
 
@@ -19,6 +20,7 @@ const Map = (props) => {
     const [location, setLocation] = useState({
         latitude: latitude,
         longitude: longitude,
+        title: '',
     });
 
     const [weather, setWeather] = useState({
@@ -49,12 +51,20 @@ const Map = (props) => {
     }
 
     function handleLocationPress(e) {
-        setLocation({
+        setLocation({...location,
             latitude: e.nativeEvent.coordinate.latitude,
             longitude: e.nativeEvent.coordinate.longitude
         })
         getWeather();
     }
+
+    function handleAddPress(){
+        props.navigation.navigate("List", {location: location});
+    }
+
+    useEffect( () => {
+        getWeather();
+    }, []);
 
     return (
         <View style = {Styles.box}>
@@ -72,7 +82,12 @@ const Map = (props) => {
             
             <WeatherCard 
                 weather = {weather}
+                location = {location}
+                setLocation = {setLocation}
             />
+            <TouchableOpacity style={Styles.locationButton} onPress={() => {handleAddPress()}}>
+                <Icon name="add" color={'#fff'} size={45} />
+            </TouchableOpacity>
         </View>
     );
 }

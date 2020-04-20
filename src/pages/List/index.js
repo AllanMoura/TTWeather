@@ -4,28 +4,10 @@ import Geolocation from 'react-native-geolocation-service';
 
 import Cardview from './../../components/CardView';
 import { FlatList } from 'react-native-gesture-handler';
+import Styles from './styles';
 
 const List = (props) => {
-    const [favorites, setFavorites] = useState([
-        {
-            id: "6b33fce8-1745-f8de-4ad8-4ee42585oprf",
-            latitude: 10,
-            longitude: 10,
-            title: "Biribiri"
-        },
-        {
-            id: "6b33fce8-1743-f8de-4ad8-4ef42585oprf",
-            latitude: 20,
-            longitude: 20,
-            title: "Birileibe"
-        },
-        {
-            id: "6b33fcd8-1715-f2de-4ad8-4eee2e85oprf",
-            latitude: 45,
-            longitude: 20,
-            title: "Besomorph"
-        },
-    ]);
+    const [favorites, setFavorites] = useState([]);
 
     async function requestLocationPermission() {
         console.log("Pedindo permissão do usuário para acessar localização")
@@ -83,10 +65,11 @@ const List = (props) => {
     }, [props.route.params?.location]);
 
     return (
-        <View>
+        <View style = {Styles.container}>
             <FlatList 
+                contentContainerStyle = {Styles.list}
                 data = {favorites}
-                renderItem = {({item}) => <Cardview id = {item.id} title = {item.title} latitude = {item.latitude} longitude = {item.longitude}/>}
+                renderItem = {({item}) => <Cardview item = {item}/>}
                 keyExtractor = {item => item.id.toString()}/>
             <Button title = "Add new Location" onPress = { () => {handleNewLocation()}}/>
 

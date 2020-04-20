@@ -60,12 +60,34 @@ const List = (props) => {
         const newFavorites = favorites.filter(item => item.id !== id);
         setFavorites(newFavorites);
     }
+
+    function handleEditButton(item){
+        const {latitude, longitude} = item;
+        console.log("Função que executa ao tentar editar um local")
+        const granted = requestLocationPermission();
+        if (granted) {
+            props.navigation.navigate("Map", {latitude, longitude, item});
+        }
+    }
     
     useEffect( () => {
         if(props.route.params?.location){
-            console.log("Funcão que cria uma nova localização para adicionar a lista")
-            console.log(props.route.params.location);
-            setFavorites([...favorites, props.route.params.location]);
+            //Check the id, if it already exists, is a edit, else, a new object
+            let isEdit = false;
+            const fav = favorites.map((item) => {
+                if(item.id === props.route.params.location.id){
+                    console.log("Existe um com mesmo id")
+                    isEdit = true;
+                    return props.route.params.location; //updates the object
+                }
+                return item;
+            });
+
+            if(isEdit){
+                setFavorites(fav);
+            }else{
+                setFavorites([...fav, props.route.params.location]);
+            }
         }
     }, [props.route.params?.location]);
 
@@ -74,7 +96,7 @@ const List = (props) => {
             <FlatList 
                 contentContainerStyle = {Styles.list}
                 data = {favorites}
-                renderItem = {({item}) => <Cardview item = {item} handleDeleteButton = {handleDeleteButton}/>}
+                renderItem = {({item}) => <Cardview item = {item} handleDeleteButton = {handleDeleteButton} handleEditButton = {handleEditButton}/>}
                 keyExtractor = {item => item.id.toString()}/>
             <Button title = "Add new Location" onPress = { () => {handleNewLocation()}}/>
 

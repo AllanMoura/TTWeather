@@ -48,8 +48,10 @@ const Map = (props) => {
     }
 
     useEffect( () => {
-        console.log(location);
         getWeather(location.latitude, location.longitude);
+        if(props.route.params?.item){
+            setLocation(props.route.params.item);
+        }
     }, []);
 
     function handleLocationPress(event) {

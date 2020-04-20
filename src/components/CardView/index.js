@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import api from './../../services/api';
 import Styles from './styles';
 
-const CardView = ({item, handleDeleteButton}) => {
+const CardView = ({item, handleDeleteButton, handleEditButton}) => {
     const [weather, setWeather] = useState({
         description: '',
         icon: '',
@@ -31,7 +31,7 @@ const CardView = ({item, handleDeleteButton}) => {
 
     useEffect( () => {
         getWeather(item.latitude, item.longitude);
-    }, []);
+    }, [item]);
 
     return (
         <View style = {Styles.box}>
@@ -56,7 +56,7 @@ const CardView = ({item, handleDeleteButton}) => {
                 <TouchableOpacity style={Styles.buttons} onPress={() => {handleDeleteButton(item.id)}}>
                     <Icon name="delete" color={'#000'} size={30} />
                 </TouchableOpacity>
-                <TouchableOpacity style={Styles.buttons} onPress={() => {handleDeleteButton(item.id)}}>
+                <TouchableOpacity style={Styles.buttons} onPress={() => {handleEditButton(item)}}>
                     <Icon name="edit" color={'#000'} size={30} />
                 </TouchableOpacity>
             </View>

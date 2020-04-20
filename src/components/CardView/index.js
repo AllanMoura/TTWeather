@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import {View, Text, Image} from 'react-native';
+import {View, Text, Image, TouchableOpacity} from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import api from './../../services/api';
 import Styles from './styles';
 
-const CardView = ({item}) => {
+const CardView = ({item, handleDeleteButton}) => {
     const [weather, setWeather] = useState({
         description: '',
         icon: '',
@@ -50,6 +51,14 @@ const CardView = ({item}) => {
                         <Text style = {Styles.textFont}>{weather.description}</Text>
                     </View>
                 </View>
+            </View>
+            <View style = {Styles.boxButtons}>
+                <TouchableOpacity style={Styles.buttons} onPress={() => {handleDeleteButton(item.id)}}>
+                    <Icon name="delete" color={'#000'} size={30} />
+                </TouchableOpacity>
+                <TouchableOpacity style={Styles.buttons} onPress={() => {handleDeleteButton(item.id)}}>
+                    <Icon name="edit" color={'#000'} size={30} />
+                </TouchableOpacity>
             </View>
         </View>
     );

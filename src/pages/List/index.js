@@ -55,6 +55,11 @@ const List = (props) => {
         }
         
     }
+
+    function handleDeleteButton(id){
+        const newFavorites = favorites.filter(item => item.id !== id);
+        setFavorites(newFavorites);
+    }
     
     useEffect( () => {
         if(props.route.params?.location){
@@ -69,7 +74,7 @@ const List = (props) => {
             <FlatList 
                 contentContainerStyle = {Styles.list}
                 data = {favorites}
-                renderItem = {({item}) => <Cardview item = {item}/>}
+                renderItem = {({item}) => <Cardview item = {item} handleDeleteButton = {handleDeleteButton}/>}
                 keyExtractor = {item => item.id.toString()}/>
             <Button title = "Add new Location" onPress = { () => {handleNewLocation()}}/>
 

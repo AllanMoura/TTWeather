@@ -34,6 +34,19 @@ const Styles = StyleSheet.create({
     celcius: {
         fontSize: 30
     },
+    buttons: {
+        backgroundColor: '#e74c3c',
+        borderRadius: 150,
+        marginRight: 15,
+        width: 35,
+        height: 35,
+        justifyContent: 'center',
+        alignItems: 'center',
+        elevation: 5,
+    },
+    boxButtons: {
+        flexDirection: 'row',
+    },
 
 });
 

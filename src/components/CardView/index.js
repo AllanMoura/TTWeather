@@ -1,11 +1,11 @@
 import React from 'react';
 import {View, Text} from 'react-native';
-const CardView = ({id, title, temp, state}) => {
+const CardView = ({id, title, latitude, longitude}) => {
     
     return (
         <View>
             <Text>{title}</Text>
-            <Text>{temp} {state}</Text>
+            <Text>{latitude} {longitude}</Text>
         </View>
     );
 

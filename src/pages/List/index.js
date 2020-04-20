@@ -8,26 +8,27 @@ import { FlatList } from 'react-native-gesture-handler';
 const List = (props) => {
     const [favorites, setFavorites] = useState([
         {
-            id: 1,
-            title: "Lugar Massa",
-            temp: 23,
-            state: "rainy",
+            id: "6b33fce8-1745-f8de-4ad8-4ee42585oprf",
+            latitude: 10,
+            longitude: 10,
+            title: "Biribiri"
         },
         {
-            id: 2,
-            title: "Lugar Massa 2",
-            temp: 25,
-            state: "Sunny",
+            id: "6b33fce8-1743-f8de-4ad8-4ef42585oprf",
+            latitude: 20,
+            longitude: 20,
+            title: "Birileibe"
         },
         {
-            id: 3,
-            title: "Lugar Massa 3",
-            temp: 32,
-            state: "cloudy",
+            id: "6b33fcd8-1715-f2de-4ad8-4eee2e85oprf",
+            latitude: 45,
+            longitude: 20,
+            title: "Besomorph"
         },
     ]);
 
     async function requestLocationPermission() {
+        console.log("Pedindo permissão do usuário para acessar localização")
         let granted = await PermissionsAndroid.check( PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION );
         if(granted) {
             return true;
@@ -50,7 +51,7 @@ const List = (props) => {
     }
 
     async function handleNewLocation() {
-    
+        console.log("Função que executa ao clicar o botão de nova localização")
         const granted = requestLocationPermission();
         if(granted) {
             console.log("Ta permitido");
@@ -75,8 +76,9 @@ const List = (props) => {
     
     useEffect( () => {
         if(props.route.params?.location){
-            console.log("Tentando adicionar um novo objeto");
+            console.log("Funcão que cria uma nova localização para adicionar a lista")
             console.log(props.route.params.location);
+            setFavorites([...favorites, props.route.params.location]);
         }
     }, [props.route.params?.location]);
 
@@ -84,7 +86,7 @@ const List = (props) => {
         <View>
             <FlatList 
                 data = {favorites}
-                renderItem = {({item}) => <Cardview id = {item.id} title = {item.title} temp = {item.temp} state = {item.state}/>}
+                renderItem = {({item}) => <Cardview id = {item.id} title = {item.title} latitude = {item.latitude} longitude = {item.longitude}/>}
                 keyExtractor = {item => item.id.toString()}/>
             <Button title = "Add new Location" onPress = { () => {handleNewLocation()}}/>
 

@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
+import { View, TouchableOpacity } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
-import api from './../../services/api';
-import { View, TouchableOpacity} from 'react-native';
-import WeatherCard from './../../components/WeatherCard';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {guidGenerator} from './../../services/util';
+import WeatherCard from './../../components/WeatherCard';
+import api from './../../services/api';
 import Styles from './styles';
-
 
 const Map = (props) => {
 
@@ -15,12 +15,12 @@ const Map = (props) => {
         longitude: longitude,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421
-    };
-
+    }
     const [location, setLocation] = useState({
         latitude: latitude,
         longitude: longitude,
         title: '',
+        id: guidGenerator(),
     });
 
     const [weather, setWeather] = useState({
@@ -29,65 +29,64 @@ const Map = (props) => {
         temp: 0,
         humidity: ''
     });
-    
 
-    async function getWeather(){
-        console.log("Antes da execução")
-        try {
-            const response = await api.get(`/weather?lat=${location.latitude}&lon=${location.longitude}&units=metric&lang=pt_br&appid=${"0c7e0440d9f55835bb3a1f247490bc4f"}`);
-            console.log("Depois da execução");
-            const infos  = {
-                description: response.data.weather[0].description,
-                icon: `https://openweathermap.org/img/w/${response.data.weather[0].icon}.png`,
-                temp: response.data.main.temp,
-                humidity: `${response.data.main.humidity} %`
-            }
-
-            setWeather(infos);
-            console.log(infos);
-        } catch (err) {
-            console.log(err);
+    async function getWeather(latitude, longitude){
+        console.log("Antes da call");
+        const response = await api.get(`/weather?lat=${latitude}&lon=${longitude}&units=metric&lang=pt_br&appid=${"0c7e0440d9f55835bb3a1f247490bc4f"}`);
+        console.log("Depois da call");
+        console.log(response);
+        
+        const infos  = {
+            description: response.data.weather[0].description,
+            icon: `https://openweathermap.org/img/w/${response.data.weather[0].icon}.png`,
+            temp: response.data.main.temp,
+            humidity: `${response.data.main.humidity} %`
         }
-    }
 
-    function handleLocationPress(e) {
-        setLocation({...location,
-            latitude: e.nativeEvent.coordinate.latitude,
-            longitude: e.nativeEvent.coordinate.longitude
-        })
-        getWeather();
-    }
+        setWeather(infos);
 
-    function handleAddPress(){
-        props.navigation.navigate("List", {location: location});
     }
 
     useEffect( () => {
-        getWeather();
+        console.log(location);
+        getWeather(location.latitude, location.longitude);
     }, []);
 
-    return (
-        <View style = {Styles.box}>
-            <MapView 
-                style = {Styles.map} 
-                initialRegion = {initialRegion} 
-                onPress = {e => handleLocationPress(e)}
-            >
+    function handleLocationPress(event) {
+        setLocation({...location,
+            latitude: event.nativeEvent.coordinate.latitude,
+            longitude: event.nativeEvent.coordinate.longitude
+        });
+        getWeather(event.nativeEvent.coordinate.latitude, event.nativeEvent.coordinate.longitude);
+    }
 
+    function handleAddPress(){
+        
+        props.navigation.navigate("List", {location: location});
+    }
+
+    return(
+        <View style = {Styles.box}>
+            <MapView
+                style = {Styles.map}
+                initialRegion = {initialRegion}
+                onPress = {(event) => {handleLocationPress(event)}}>
+                
                 <Marker 
                     coordinate = {location}
-                    title = {"Marker"}
-                />
+                    title = {"Marker"}/>
+
             </MapView>
             
             <WeatherCard 
                 weather = {weather}
                 location = {location}
-                setLocation = {setLocation}
-            />
+                setLocation = {setLocation}/>
+            
             <TouchableOpacity style={Styles.locationButton} onPress={() => {handleAddPress()}}>
                 <Icon name="add" color={'#fff'} size={45} />
             </TouchableOpacity>
+                    
         </View>
     );
 }

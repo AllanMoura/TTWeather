@@ -8,8 +8,37 @@ const Stack = createStackNavigator();
 const Routes = () => {
     return (
         <Stack.Navigator initialRouteName = "List">
-            <Stack.Screen name = "List" component = {ListScreen}/>
-            <Stack.Screen name = "Map" component = {Map}/>
+            <Stack.Screen
+                name = "List" 
+                component = {ListScreen}
+                options={{
+                    headerTitleAlign: 'center',
+                    title: 'Locais preferidos',
+                    headerStyle: {
+                      backgroundColor: '#e74c3c',
+                      
+                    },
+                    headerTintColor: '#fff',
+                    headerTitleStyle: {
+                      fontWeight: 'bold',
+                    },
+                  }}
+            />
+            <Stack.Screen 
+                name = "Map"
+                component = {Map}
+                    options={{
+                        headerTitleAlign: 'center',
+                        title: 'Selecione um local',
+                        headerStyle: {
+                            backgroundColor: '#e74c3c',
+                        },
+                        headerTintColor: '#fff',
+                        headerTitleStyle: {
+                            fontWeight: 'bold',
+                        },
+                    }}
+                />
         </Stack.Navigator>
     );
 }

@@ -12,7 +12,7 @@ const WeatherCard = (props) => {
             <View style = {Styles.coords}>
                 <Image 
                     style = {Styles.image}
-                    source = {{uri: weather.icon}}/>
+                    source = {weather.icon == ''? null :{uri: weather.icon}}/>
                 
                 <View style = {Styles.texts}>
                     <Text style = {Styles.celcius}>{weather.temp} &#8451;</Text>

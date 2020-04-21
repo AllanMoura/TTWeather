@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {View, Text, Image, TouchableOpacity} from 'react-native';
+import {View, Text, Image, TouchableOpacity, Alert} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import api from './../../services/api';
 import Styles from './styles';
@@ -13,19 +13,19 @@ const CardView = ({item, handleDeleteButton, handleEditButton}) => {
     });
 
     async function getWeather(latitude, longitude){
-        console.log("Antes da call");
-        const response = await api.get(`/weather?lat=${latitude}&lon=${longitude}&units=metric&lang=pt_br&appid=${"0c7e0440d9f55835bb3a1f247490bc4f"}`);
-        console.log("Depois da call");
-        console.log(response);
-        
-        const infos  = {
-            description: response.data.weather[0].description,
-            icon: `https://openweathermap.org/img/w/${response.data.weather[0].icon}.png`,
-            temp: response.data.main.temp,
-            humidity: `${response.data.main.humidity} %`
+        try{    
+            const response = await api.get(`/weather?lat=${latitude}&lon=${longitude}&units=metric&lang=pt_br&appid=${"0c7e0440d9f55835bb3a1f247490bc4f"}`);
+            const infos  = {
+                description: response.data.weather[0].description,
+                icon: `https://openweathermap.org/img/w/${response.data.weather[0].icon}.png`,
+                temp: response.data.main.temp,
+                humidity: `${response.data.main.humidity} %`
+            }
+            setWeather(infos);
+        }catch(error){
+            Alert.alert('Problema ao buscar informações da Api de clima');
         }
-
-        setWeather(infos);
+        
 
     }
 

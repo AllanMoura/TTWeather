@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity, Alert } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {guidGenerator} from './../../services/util';
@@ -32,19 +32,19 @@ const Map = (props) => {
     });
 
     async function getWeather(latitude, longitude){
-        console.log("Antes da call");
-        const response = await api.get(`/weather?lat=${latitude}&lon=${longitude}&units=metric&lang=pt_br&appid=${"0c7e0440d9f55835bb3a1f247490bc4f"}`);
-        console.log("Depois da call");
-        console.log(response);
-        
-        const infos  = {
-            description: response.data.weather[0].description,
-            icon: `https://openweathermap.org/img/w/${response.data.weather[0].icon}.png`,
-            temp: response.data.main.temp,
-            humidity: `${response.data.main.humidity} %`
+        try{
+            const response = await api.get(`/weather?lat=${latitude}&lon=${longitude}&units=metric&lang=pt_br&appid=${"0c7e0440d9f55835bb3a1f247490bc4f"}`);
+            const infos  = {
+                description: response.data.weather[0].description,
+                icon: `https://openweathermap.org/img/w/${response.data.weather[0].icon}.png`,
+                temp: response.data.main.temp,
+                humidity: `${response.data.main.humidity} %`
+            }
+            setWeather(infos);
+        }catch(error){
+            Alert.alert("Problemas ao buscar informações do clima da API.");
         }
-
-        setWeather(infos);
+        
 
     }
 
@@ -71,6 +71,7 @@ const Map = (props) => {
     return(
         <View style = {Styles.box}>
             <MapView
+                provider ={'google'}
                 style = {Styles.map}
                 initialRegion = {initialRegion}
                 onPress = {(event) => {handleLocationPress(event)}}>

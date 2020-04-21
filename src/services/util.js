@@ -1,5 +1,4 @@
 import {PermissionsAndroid} from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
 
 export function guidGenerator() {
     var S4 = function() {
@@ -9,7 +8,6 @@ export function guidGenerator() {
 }
 
 export async function RequestLocationPermission() {
-    console.log("Pedindo permissão do usuário para acessar localização")
     let granted = await PermissionsAndroid.check( PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION );
     if(granted) {
         return true;
@@ -24,8 +22,7 @@ export async function RequestLocationPermission() {
                 return false;
             }
         } catch(err) {
-            //TODO
-            console.warn(err);
+            
             return false;
         }
     }

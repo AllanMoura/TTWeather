@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, TouchableOpacity, Text} from 'react-native';
+import {View, TouchableOpacity, Alert} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import {RequestLocationPermission, OrderDescArray } from './../../services/util';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -12,25 +12,21 @@ const List = (props) => {
     const [favorites, setFavorites] = useState([]);
 
     async function handleNewLocation() {
-        console.log("Função que executa ao clicar o botão de nova localização")
         const granted = RequestLocationPermission();
         if(granted) {
-            console.log("Ta permitido");
             Geolocation.getCurrentPosition(
                 (position) => {
                     const {latitude, longitude} = position.coords;
                     props.navigation.navigate("Map", {latitude, longitude});
                 },
                 (err) => {
-                    //TODO
-                    console.log(err);
+                    Alert.alert("Problema ao buscar a localização do usuário.")
                 },
                 { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000}
             );
             
         }else{
-           //TODO
-           console.log("Deu ruim");
+            Alert.alert("Permissão para acessar localização não fornecida.");
         }
         
     }
@@ -43,7 +39,6 @@ const List = (props) => {
 
     function handleEditButton(item){
         const {latitude, longitude} = item;
-        console.log("Função que executa ao tentar editar um local")
         const granted = RequestLocationPermission();
         if (granted) {
             props.navigation.navigate("Map", {latitude, longitude, item});
@@ -54,7 +49,7 @@ const List = (props) => {
         try{
             return await AsyncStorage.setItem('favorites', JSON.stringify(list));
         }catch(err){
-            console.log("Problema ao armazenar");
+            Alert.alert("Erro ao armazenar informações de arquivos locais.")
         }
     }
 
@@ -64,7 +59,6 @@ const List = (props) => {
             let isEdit = false;
             const fav = favorites.map((item) => {
                 if(item.id === props.route.params.location.id){
-                    console.log("Existe um com mesmo id")
                     isEdit = true;
                     return props.route.params.location; //updates the object
                 }
@@ -91,8 +85,7 @@ const List = (props) => {
                     setFavorites(list);
                 }
             }catch(err){
-                console.log("erro na busca dos arquivos");
-                console.log(err)
+                Alert.alert("Problemas ao buscar informações dos arquivos locais.");
             }
         }
         getList();

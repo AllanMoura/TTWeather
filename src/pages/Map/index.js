@@ -21,6 +21,7 @@ const Map = (props) => {
         longitude: longitude,
         title: '',
         id: guidGenerator(),
+        date: new Date().toString(),
     });
 
     const [weather, setWeather] = useState({

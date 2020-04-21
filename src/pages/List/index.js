@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {View, Button} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
-import {RequestLocationPermission } from './../../services/util';
+import {RequestLocationPermission, OrderDescArray } from './../../services/util';
 import AsyncStorage from '@react-native-community/async-storage';
 
 import Cardview from './../../components/CardView';
@@ -75,8 +75,9 @@ const List = (props) => {
                 setFavorites(fav);
                 saveFavorites(fav);
             }else{
-                setFavorites([...fav, props.route.params.location]);
-                saveFavorites([...fav, props.route.params.location]);
+                fav.unshift(props.route.params.location);
+                setFavorites(fav);
+                saveFavorites(fav);
             }
         }
     }, [props.route.params?.location]);
@@ -86,7 +87,7 @@ const List = (props) => {
             try {
                 const data = await AsyncStorage.getItem('favorites');
                 if (data !== null){
-                    const list = JSON.parse(data);
+                    const list = OrderDescArray(JSON.parse(data));
                     setFavorites(list);
                 }
             }catch(err){

@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import {View, Button, PermissionsAndroid} from 'react-native';
+import {View, Button} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
+import {RequestLocationPermission } from './../../services/util';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import Cardview from './../../components/CardView';
 import { FlatList } from 'react-native-gesture-handler';
@@ -9,32 +11,9 @@ import Styles from './styles';
 const List = (props) => {
     const [favorites, setFavorites] = useState([]);
 
-    async function requestLocationPermission() {
-        console.log("Pedindo permissão do usuário para acessar localização")
-        let granted = await PermissionsAndroid.check( PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION );
-        if(granted) {
-            return true;
-        }else {
-            try {
-                granted = await PermissionsAndroid.request(
-                    PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
-                );
-                if(granted){
-                    return true;
-                }else{
-                    return false;
-                }
-            } catch(err) {
-                //TODO
-                console.warn(err);
-                return false;
-            }
-        }
-    }
-
     async function handleNewLocation() {
         console.log("Função que executa ao clicar o botão de nova localização")
-        const granted = requestLocationPermission();
+        const granted = RequestLocationPermission();
         if(granted) {
             console.log("Ta permitido");
             Geolocation.getCurrentPosition(
@@ -59,18 +38,27 @@ const List = (props) => {
     function handleDeleteButton(id){
         const newFavorites = favorites.filter(item => item.id !== id);
         setFavorites(newFavorites);
+        saveFavorites(newFavorites);
     }
 
     function handleEditButton(item){
         const {latitude, longitude} = item;
         console.log("Função que executa ao tentar editar um local")
-        const granted = requestLocationPermission();
+        const granted = RequestLocationPermission();
         if (granted) {
             props.navigation.navigate("Map", {latitude, longitude, item});
         }
     }
-    
-    useEffect( () => {
+
+    async function saveFavorites(list){
+        try{
+            return await AsyncStorage.setItem('favorites', JSON.stringify(list));
+        }catch(err){
+            console.log("Problema ao armazenar");
+        }
+    }
+
+    useEffect( () => { 
         if(props.route.params?.location){
             //Check the id, if it already exists, is a edit, else, a new object
             let isEdit = false;
@@ -85,11 +73,29 @@ const List = (props) => {
 
             if(isEdit){
                 setFavorites(fav);
+                saveFavorites(fav);
             }else{
                 setFavorites([...fav, props.route.params.location]);
+                saveFavorites([...fav, props.route.params.location]);
             }
         }
     }, [props.route.params?.location]);
+
+    useEffect( () => {
+        async function getList(){
+            try {
+                const data = await AsyncStorage.getItem('favorites');
+                if (data !== null){
+                    const list = JSON.parse(data);
+                    setFavorites(list);
+                }
+            }catch(err){
+                console.log("erro na busca dos arquivos");
+                console.log(err)
+            }
+        }
+        getList();
+    }, []);
 
     return (
         <View style = {Styles.container}>

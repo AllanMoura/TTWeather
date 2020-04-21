@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react';
-import {View, Button} from 'react-native';
+import {View, TouchableOpacity, Text} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import {RequestLocationPermission, OrderDescArray } from './../../services/util';
 import AsyncStorage from '@react-native-community/async-storage';
-
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import Cardview from './../../components/CardView';
 import { FlatList } from 'react-native-gesture-handler';
 import Styles from './styles';
@@ -105,7 +105,11 @@ const List = (props) => {
                 data = {favorites}
                 renderItem = {({item}) => <Cardview item = {item} handleDeleteButton = {handleDeleteButton} handleEditButton = {handleEditButton}/>}
                 keyExtractor = {item => item.id.toString()}/>
-            <Button title = "Add new Location" onPress = { () => {handleNewLocation()}}/>
+            <TouchableOpacity
+                onPress = {() => {handleNewLocation()}}
+                style = {Styles.touchableOpacityStyle}>
+                <Icon name="add" color={'#fff'} size={45} />
+            </TouchableOpacity>
 
         </View>
     );
